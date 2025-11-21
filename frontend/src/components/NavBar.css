@@ -1,0 +1,163 @@
+/* Remove body centering; handled in global index.css */
+body { padding: 0; }
+
+.Navbar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    z-index: 1000;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    background-color: rgba(15,15,15,0.85);
+    -webkit-backdrop-filter: blur(6px) saturate(110%);
+    backdrop-filter: blur(6px) saturate(110%);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+
+.Navbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    padding: 0 1.1rem;
+}
+
+.Navbar-links { display: flex; align-items: center; gap: 0.4rem; }
+
+/* Animated gradient borders (top + bottom) */
+.Navbar-container{ overflow: visible; }
+
+.Navbar-container::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(230,57,70,0.95), rgba(178,34,43,0.9), rgba(230,57,70,0.95));
+    background-size: 300% 100%;
+    animation: gradientShift 6s linear infinite;
+    pointer-events: none;
+}
+
+.Navbar-container::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(178,34,43,0.65), rgba(230,57,70,0.85));
+    background-size: 300% 100%;
+    animation: gradientShiftReverse 6s linear infinite;
+    pointer-events: none;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+@keyframes gradientShift{
+    0%{ background-position: 0% 50%; }
+    50%{ background-position: 100% 50%; }
+    100%{ background-position: 0% 50%; }
+}
+
+@keyframes gradientShiftReverse{
+    0%{ background-position: 200% 50%; }
+    50%{ background-position: 100% 50%; }
+    100%{ background-position: 200% 50%; }
+}
+
+.nav-link{
+    color: var(--text-light);
+    text-decoration: none;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    transition: color 180ms ease, background-color 200ms ease, transform 160ms ease;
+    position: relative;
+}
+
+.nav-link:hover{
+    color: var(--bg-dark);
+    background: rgba(230,57,70,0.12);
+    transform: translateY(-2px);
+}
+
+/* Active link indicator: small pill and subtle underline animation */
+.nav-link::after{
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    bottom: -8px;
+    width: 36px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+    transition: transform 320ms cubic-bezier(.2,.9,.3,1), opacity 200ms ease;
+    opacity: 0;
+}
+
+.nav-link.active{
+    color: var(--accent);
+}
+
+.nav-link.active::after{
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+}
+
+
+.Navbar-logo-wrap{
+    display: inline-block;
+    margin-right: auto; /* push links to the right */
+    padding: 0; /* removed border spacing to remove visible border */
+    border-radius: 8px;
+    background: transparent; /* no gradient border */
+    background-size: initial;
+    animation: none;
+    transition: transform 220ms ease, box-shadow 240ms ease;
+}
+
+.Navbar-logo{
+    display: block;
+    height: auto;
+    max-height: 56px; /* allow wider/natural aspect ratio */
+    width: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    background: var(--bg-white, #ffffff);
+    box-shadow: 0 6px 20px rgba(3,34,36,0.06);
+    transition: transform 200ms ease, box-shadow 240ms ease, filter 220ms ease;
+}
+
+.Navbar-logo-wrap:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 10px 26px rgba(0,207,232,0.08);
+}
+
+@keyframes logoBorderShift{
+    0%{ background-position: 0% 50%; }
+    50%{ background-position: 100% 50%; }
+    100%{ background-position: 0% 50%; }
+}
+
+@media (max-width: 760px){
+    .Navbar-inner { justify-content: space-between; gap: 0.6rem; }
+    .Navbar-links { flex-wrap: wrap; gap: 0.2rem; }
+}
+@media (max-width: 540px){
+    .Navbar-container { height: auto; padding-bottom: 0.35rem; }
+    .Navbar-inner { flex-wrap: wrap; padding: 0 0.75rem; }
+    .Navbar-logo { max-height: 46px; }
+    .nav-link { padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+}
+@media (max-width: 400px){
+    .nav-link { font-size: 0.75rem; letter-spacing: 0.1px; }
+}

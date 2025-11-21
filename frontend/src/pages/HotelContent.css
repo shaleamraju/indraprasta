@@ -1,0 +1,97 @@
+/* Dark + red refined layout */
+.hotel-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.2rem 2.5rem;
+  color: var(--text-light);
+  font-family: var(--font-family);
+}
+
+.hero {
+  background:
+    radial-gradient(800px 400px at 10% 10%, rgba(230,57,70,0.08), transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  padding: 2.4rem 2rem;
+  border-radius: 18px;
+  margin-bottom: 2.2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(230,57,70,0.12), transparent 60%);
+  pointer-events: none;
+}
+.hero-inner { display: flex; gap: 2rem; align-items: center; width: 100%; }
+.hero-copy { flex: 1; }
+.hero-copy h1 { font-size: clamp(1.9rem, 4.5vw + 0.4rem, 2.7rem); margin: 0 0 0.75rem; font-family: var(--display-family); letter-spacing: .5px; }
+.hero-copy p { margin: 0; font-size: 1rem; color: var(--text-muted); }
+.hero-contact a { color: var(--accent); }
+.hero-media img { width: 100%; max-width: 520px; border-radius: 14px; aspect-ratio: 16 / 9; object-fit: cover; box-shadow: 0 8px 28px rgba(0,0,0,0.55); transition: transform .5s ease; }
+.hero-media img:hover { transform: scale(1.02); }
+
+.section {
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 1.6rem 1.4rem 1.4rem;
+  margin-bottom: 1.4rem;
+  box-shadow: 0 4px 18px -2px rgba(0,0,0,0.6);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.section h2 { margin: 0 0 0.9rem; font-size: 1.6rem; font-family: var(--display-family); letter-spacing: .5px; }
+.section p { line-height: 1.5; }
+
+/* Gallery */
+.gallery-slider { overflow: hidden; position: relative; margin-top: .75rem; }
+.gallery-slider::after { content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(90deg, rgba(7,7,7,0.85) 0%, rgba(7,7,7,0) 8%, rgba(7,7,7,0) 92%, rgba(7,7,7,0.85) 100%); }
+.slider-track { display: flex; gap: 1.2rem; align-items: stretch; will-change: transform; animation: slideLeft 40s linear infinite; }
+.gallery-slider:hover .slider-track { animation-play-state: paused; }
+.slide { flex: 0 0 28%; }
+.slide img { width: 100%; height: 240px; object-fit: cover; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.55); outline: 1px solid rgba(230,57,70,0.35); outline-offset: -1px; transition: filter .4s ease, transform .4s ease; }
+.slide img:hover { filter: brightness(1.15) saturate(1.1); transform: translateY(-4px); }
+
+@keyframes slideLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* Amenities / Services pills */
+.amenities ul, .services ul { display: flex; flex-wrap: wrap; gap: .65rem .9rem; list-style: none; padding: 0; margin: 0; }
+.amenities li, .services li { background: rgba(230,57,70,0.12); padding: .5rem .85rem; border-radius: 999px; font-size: .85rem; color: var(--text-light); letter-spacing: .4px; }
+
+/* Reviews */
+.reviews blockquote { margin:0; padding:1rem 1.2rem; border-left:4px solid var(--accent); background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border-radius: 8px; font-style: italic; }
+
+/* Contact links */
+.contact a { color: var(--accent); text-decoration: none; }
+.contact a:hover { text-decoration: underline; }
+
+@media (max-width: 1080px) {
+  .slide { flex: 0 0 34%; }
+}
+@media (max-width: 860px) {
+  .hero { flex-direction: column; align-items: flex-start; }
+  .hero-inner { flex-direction: column; gap: 1.4rem; }
+  .hero-copy h1 { font-size: 2.1rem; }
+  .slider-track { animation-duration: 48s; }
+  .slide { flex: 0 0 48%; }
+}
+@media (max-width: 640px) {
+  .slider-track { animation-duration: 54s; }
+  .slide { flex: 0 0 84%; }
+  .slide img { height: 200px; }
+  .hero-media img { max-width: 100%; }
+}
+@media (max-width: 420px) {
+  .slide { flex: 0 0 92%; }
+  .slide img { height: 180px; }
+  .hero { padding: 1.8rem 1.2rem; }
+  .hero-copy h1 { font-size: clamp(1.7rem, 7vw + 0.2rem, 2.1rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slider-track { animation: none; }
+}

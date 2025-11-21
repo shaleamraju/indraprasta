@@ -1,0 +1,20 @@
+{
+  "4": {
+    "occupied": true,
+    "roomNumber": 4,
+    "bookedAt": "2025-11-21T12:16:21.661Z",
+    "bookedBy": "admin"
+  },
+  "5": {
+    "occupied": true,
+    "roomNumber": 5,
+    "bookedAt": "2025-11-21T12:16:22.653Z",
+    "bookedBy": "admin"
+  },
+  "6": {
+    "occupied": true,
+    "roomNumber": 6,
+    "bookedAt": "2025-11-21T12:16:23.358Z",
+    "bookedBy": "admin"
+  }
+}

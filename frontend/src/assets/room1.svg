@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#fffefe"/>
+  <rect x="40" y="40" width="520" height="320" rx="10" fill="#ffffff" stroke="#f0fbfc"/>
+  <g fill="#00cfe8" opacity="0.08">
+    <rect x="60" y="60" width="220" height="160" rx="8"/>
+    <rect x="300" y="60" width="220" height="160" rx="8"/>
+  </g>
+  <text x="36" y="360" font-family="Arial" font-size="12" fill="#6c7a83">Room placeholder</text>
+</svg>

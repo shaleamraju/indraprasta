@@ -308,7 +308,7 @@ export default function Admin() {
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Type</th><th>Name</th><th>Date</th><th>Rooms</th><th>Room Numbers</th><th>Payment</th><th>Doc</th>
+                <th>Type</th><th>Name</th><th>Email</th><th>Date</th><th>Rooms</th><th>Room Numbers</th><th>Payment</th><th>Doc</th><th>Receipt</th>
               </tr>
             </thead>
             <tbody>
@@ -316,11 +316,19 @@ export default function Admin() {
                 <tr key={b.id} className="row">
                   <td data-label="Type">{b.type}</td>
                   <td data-label="Name">{b.name}</td>
+                  <td data-label="Email">{b.email || '-'}</td>
                   <td data-label="Date">{b.date}</td>
                   <td data-label="Rooms">{b.rooms}</td>
                   <td data-label="Room Numbers">{b.roomNumbers ? b.roomNumbers.join(', ') : '-'}</td>
                   <td data-label="Payment">{b.payment}</td>
                   <td data-label="Doc">{b.document ? <a href={`/api/uploads/${b.document}`} target="_blank" rel="noreferrer">file</a> : '-'}</td>
+                  <td data-label="Receipt">
+                    {b.receiptGenerated ? (
+                      <a href={`/api/receipts-view/receipt-${b.id}.pdf`} target="_blank" rel="noreferrer" className="receipt-link">📄 PDF</a>
+                    ) : (
+                      <span style={{color: '#888'}}>Generating...</span>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>

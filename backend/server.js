@@ -6,12 +6,21 @@ const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { v4: uuid } = require('uuid');
+const nodemailer = require('nodemailer');
+const PDFDocument = require('pdfkit');
 
 const PORT = process.env.PORT || 4000;
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.ADMIN_PASS || 'secret123'; // used only for initial seed if no persisted admin file exists
 const JWT_SECRET = process.env.JWT_SECRET || 'devsecret';
 const TOTAL_ROOMS = 30;
+
+// Email configuration
+const EMAIL_USER = process.env.EMAIL_USER || '';
+const EMAIL_PASS = process.env.EMAIL_PASS || '';
+const EMAIL_SERVICE = process.env.EMAIL_SERVICE || 'gmail';
+const HOTEL_NAME = process.env.HOTEL_NAME || 'Indraprasta Hotel';
+const HOTEL_EMAIL = process.env.HOTEL_EMAIL || EMAIL_USER;
 
 const app = express();
 app.use(cors());
@@ -36,6 +45,8 @@ const upload = multer({ storage });
 
 const dataDir = path.join(__dirname, 'data');
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
+const receiptsDir = path.join(__dirname, 'receipts');
+if (!fs.existsSync(receiptsDir)) fs.mkdirSync(receiptsDir);
 const bookingsFile = path.join(dataDir, 'bookings.json');
 const adminFile = path.join(dataDir, 'admin.json');
 const occupancyFile = path.join(dataDir, 'room-occupancy.json');
@@ -74,6 +85,112 @@ function readOccupancy() {
 }
 function writeOccupancy(data) {
   fs.writeFileSync(occupancyFile, JSON.stringify(data, null, 2));
+}
+
+// Email transporter
+let transporter = null;
+if (EMAIL_USER && EMAIL_PASS) {
+  transporter = nodemailer.createTransport({
+    service: EMAIL_SERVICE,
+    auth: {
+      user: EMAIL_USER,
+      pass: EMAIL_PASS
+    }
+  });
+}
+
+// Generate PDF receipt
+function generateReceipt(booking) {
+  return new Promise((resolve, reject) => {
+    const doc = new PDFDocument({ margin: 50 });
+    const fileName = `receipt-${booking.id}.pdf`;
+    const filePath = path.join(receiptsDir, fileName);
+    const stream = fs.createWriteStream(filePath);
+
+    doc.pipe(stream);
+
+    // Header
+    doc.fontSize(24).text(HOTEL_NAME, { align: 'center' });
+    doc.fontSize(10).text('Booking Receipt', { align: 'center' });
+    doc.moveDown();
+    doc.fontSize(10).text(`Receipt Date: ${new Date().toLocaleDateString()}`, { align: 'right' });
+    doc.text(`Booking ID: ${booking.id}`, { align: 'right' });
+    doc.moveDown(2);
+
+    // Customer Details
+    doc.fontSize(14).text('Customer Details', { underline: true });
+    doc.moveDown(0.5);
+    doc.fontSize(10);
+    doc.text(`Name: ${booking.name}`);
+    if (booking.email) doc.text(`Email: ${booking.email}`);
+    doc.text(`Phone: ${booking.phone}`);
+    if (booking.address) doc.text(`Address: ${booking.address}`);
+    doc.moveDown(2);
+
+    // Booking Details
+    doc.fontSize(14).text('Booking Details', { underline: true });
+    doc.moveDown(0.5);
+    doc.fontSize(10);
+    doc.text(`Check-in Date: ${booking.date}`);
+    doc.text(`Number of Rooms: ${booking.rooms}`);
+    doc.text(`Room Numbers: ${booking.roomNumbers.join(', ')}`);
+    doc.text(`Payment: ${booking.payment}`);
+    doc.moveDown(2);
+
+    // Footer
+    doc.fontSize(8).text('Thank you for choosing ' + HOTEL_NAME, { align: 'center', color: 'gray' });
+    doc.text('For any queries, please contact us at ' + HOTEL_EMAIL, { align: 'center', color: 'gray' });
+
+    doc.end();
+
+    stream.on('finish', () => resolve({ fileName, filePath }));
+    stream.on('error', reject);
+  });
+}
+
+// Send email with receipt
+async function sendBookingEmail(booking, receiptPath) {
+  if (!transporter) {
+    console.log('Email not configured, skipping email send');
+    return { sent: false, reason: 'Email not configured' };
+  }
+
+  try {
+    const mailOptions = {
+      from: `"${HOTEL_NAME}" <${EMAIL_USER}>`,
+      to: booking.email,
+      subject: `Booking Confirmation - ${HOTEL_NAME}`,
+      html: `
+        <h2>Booking Confirmation</h2>
+        <p>Dear ${booking.name},</p>
+        <p>Thank you for your booking at ${HOTEL_NAME}. Your booking has been confirmed.</p>
+        
+        <h3>Booking Details:</h3>
+        <ul>
+          <li><strong>Booking ID:</strong> ${booking.id}</li>
+          <li><strong>Check-in Date:</strong> ${booking.date}</li>
+          <li><strong>Room Numbers:</strong> ${booking.roomNumbers.join(', ')}</li>
+          <li><strong>Number of Rooms:</strong> ${booking.rooms}</li>
+          <li><strong>Payment:</strong> ${booking.payment}</li>
+        </ul>
+        
+        <p>Please find your receipt attached to this email.</p>
+        <p>We look forward to welcoming you!</p>
+        
+        <p>Best regards,<br>${HOTEL_NAME}</p>
+      `,
+      attachments: receiptPath ? [{
+        filename: `receipt-${booking.id}.pdf`,
+        path: receiptPath
+      }] : []
+    };
+
+    await transporter.sendMail(mailOptions);
+    return { sent: true };
+  } catch (error) {
+    console.error('Email send error:', error);
+    return { sent: false, error: error.message };
+  }
 }
 
 function authMiddleware(req, res, next) {
@@ -123,7 +240,7 @@ app.post('/api/admin/reset-password', (req, res) => {
 });
 
 // Create booking (online)
-app.post('/api/bookings', upload.single('document'), (req, res) => {
+app.post('/api/bookings', upload.single('document'), async (req, res) => {
   const { name, email, phone, address, roomNumbers, date, payment } = req.body;
   let parsedRoomNumbers = [];
   if (typeof roomNumbers === 'string') {
@@ -149,15 +266,41 @@ app.post('/api/bookings', upload.single('document'), (req, res) => {
     date,
     payment: payment || 'pending',
     document: docFile,
+    receiptGenerated: false,
     createdAt: new Date().toISOString()
   };
   bookings.push(booking);
   writeBookings(bookings);
+
+  // Generate receipt and send email asynchronously
+  (async () => {
+    try {
+      const receipt = await generateReceipt(booking);
+      booking.receipt = receipt.fileName;
+      booking.receiptGenerated = true;
+      
+      // Update booking with receipt info
+      const updatedBookings = readBookings();
+      const bookingIndex = updatedBookings.findIndex(b => b.id === booking.id);
+      if (bookingIndex !== -1) {
+        updatedBookings[bookingIndex] = booking;
+        writeBookings(updatedBookings);
+      }
+
+      // Send email
+      if (email) {
+        await sendBookingEmail(booking, receipt.filePath);
+      }
+    } catch (error) {
+      console.error('Receipt/Email error:', error);
+    }
+  })();
+
   res.status(201).json(booking);
 });
 
 // Offline booking creation (admin)
-app.post('/api/admin/bookings/offline', authMiddleware, upload.single('document'), (req, res) => {
+app.post('/api/admin/bookings/offline', authMiddleware, upload.single('document'), async (req, res) => {
   const { name, phone, roomNumbers, date, payment } = req.body;
   let parsedRoomNumbers = [];
   if (typeof roomNumbers === 'string') {
@@ -183,16 +326,49 @@ app.post('/api/admin/bookings/offline', authMiddleware, upload.single('document'
     date,
     payment: payment || 'pending',
     document: docFile,
+    receiptGenerated: false,
     createdAt: new Date().toISOString()
   };
   bookings.push(booking);
   writeBookings(bookings);
+
+  // Generate receipt
+  (async () => {
+    try {
+      const receipt = await generateReceipt(booking);
+      booking.receipt = receipt.fileName;
+      booking.receiptGenerated = true;
+      
+      const updatedBookings = readBookings();
+      const bookingIndex = updatedBookings.findIndex(b => b.id === booking.id);
+      if (bookingIndex !== -1) {
+        updatedBookings[bookingIndex] = booking;
+        writeBookings(updatedBookings);
+      }
+    } catch (error) {
+      console.error('Receipt generation error:', error);
+    }
+  })();
+
   res.status(201).json(booking);
 });
 
 // List bookings (admin)
 app.get('/api/admin/bookings', authMiddleware, (req, res) => {
   res.json(readBookings());
+});
+
+// Get single booking (public - for receipt page)
+app.get('/api/public/booking/:bookingId', (req, res) => {
+  const { bookingId } = req.params;
+  const bookings = readBookings();
+  const booking = bookings.find(b => b.id === bookingId);
+  
+  if (!booking) {
+    return res.status(404).json({ error: 'Booking not found' });
+  }
+  
+  res.json(booking);
 });
 
 // Availability for a given date
@@ -247,8 +423,47 @@ app.post('/api/admin/rooms/toggle', authMiddleware, (req, res) => {
   }
 });
 
+// Download receipt endpoint
+app.get('/api/receipts/:bookingId', authMiddleware, (req, res) => {
+  const { bookingId } = req.params;
+  const fileName = `receipt-${bookingId}.pdf`;
+  const filePath = path.join(receiptsDir, fileName);
+  
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: 'Receipt not found' });
+  }
+  
+  res.download(filePath, fileName);
+});
+
+// Generate receipt on demand
+app.post('/api/admin/generate-receipt/:bookingId', authMiddleware, async (req, res) => {
+  const { bookingId } = req.params;
+  const bookings = readBookings();
+  const booking = bookings.find(b => b.id === bookingId);
+  
+  if (!booking) {
+    return res.status(404).json({ error: 'Booking not found' });
+  }
+  
+  try {
+    const receipt = await generateReceipt(booking);
+    booking.receipt = receipt.fileName;
+    booking.receiptGenerated = true;
+    
+    const bookingIndex = bookings.findIndex(b => b.id === bookingId);
+    bookings[bookingIndex] = booking;
+    writeBookings(bookings);
+    
+    res.json({ success: true, receipt: receipt.fileName });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to generate receipt' });
+  }
+});
+
 // Serve uploaded documents
 app.use('/api/uploads', express.static(uploadDir));
+app.use('/api/receipts-view', express.static(receiptsDir));
 
 app.listen(PORT, () => {
   console.log(`Backend listening on port ${PORT}`);

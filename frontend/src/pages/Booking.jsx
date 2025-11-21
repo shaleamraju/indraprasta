@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { apiFetch } from '../api/client.js';
 import './Booking.css';
 
 export default function Booking() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '', email: '', phone: '', address: '', date: '', payment: '', document: null
   });
@@ -13,6 +15,7 @@ export default function Booking() {
 
   useEffect(() => {
     if (form.date) {
+      // eslint-disable-next-line react-hooks/immutability
       fetchRoomStatus();
     }
   }, [form.date]);
@@ -24,7 +27,7 @@ export default function Booking() {
       setRoomStatus(data);
       setSelectedRooms([]);
     } catch (err) {
-      setError('Failed to fetch room availability');
+      setError('Failed to fetch room availability', err.message);
     }
   }
 
@@ -59,11 +62,9 @@ export default function Booking() {
       const fd = new FormData();
       Object.entries(form).forEach(([k,v]) => { if (v) fd.append(k, v); });
       fd.append('roomNumbers', JSON.stringify(selectedRooms));
-      await apiFetch('/api/bookings', { method: 'POST', body: fd });
-      setStatus('Booking successful');
-      setForm({ name:'', email:'', phone:'', address:'', date:'', payment:'', document:null });
-      setSelectedRooms([]);
-      fetchRoomStatus();
+      const booking = await apiFetch('/api/bookings', { method: 'POST', body: fd });
+      // Redirect to receipt page
+      navigate(`/receipt/${booking.id}`);
     } catch (err) {
       setStatus(null);
       setError(err.message);

@@ -10,14 +10,18 @@ A full-stack hotel booking application with admin panel for managing room occupa
 - 📱 Real-time availability checking
 - 📄 Document upload for ID proof
 - 💳 Payment reference tracking
+- 📧 Automatic email confirmation with PDF receipt
+- 🧾 Beautiful receipt page after booking
 
 ### Admin Panel
 - 🔐 Secure authentication with JWT
 - 🏨 Room occupancy management
 - ✅ Toggle rooms between occupied/available
-- 📊 View all bookings
+- 📊 View all bookings with email addresses
+- 📥 Download PDF receipts for any booking
 - 🔄 Offline booking creation
 - 🔑 Password management
+- 📄 Automatic receipt generation
 
 ## Tech Stack
 
@@ -84,6 +88,13 @@ NODE_ENV=production
 JWT_SECRET=your-secret-key
 ADMIN_USER=admin
 ADMIN_PASS=your-secure-password
+
+# Email (optional - for booking confirmations)
+EMAIL_SERVICE=gmail
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
+HOTEL_NAME=Your Hotel Name
+HOTEL_EMAIL=contact@yourhotel.com
 ```
 
 ### Frontend

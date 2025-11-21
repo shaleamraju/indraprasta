@@ -1,0 +1,155 @@
+.receipt-page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.receipt-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.receipt-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.success-message {
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+.receipt-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.receipt-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.receipt-title h2 {
+  color: #333;
+  margin: 0;
+}
+
+.booking-id {
+  background: #667eea;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.receipt-section {
+  margin-bottom: 2rem;
+}
+
+.receipt-section h3 {
+  color: #667eea;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+}
+
+.details-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.detail-item .label {
+  font-weight: 600;
+  color: #666;
+}
+
+.detail-item .value {
+  color: #333;
+}
+
+.rooms-list {
+  font-weight: 600;
+  color: #667eea;
+}
+
+.receipt-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e0e0e0;
+}
+
+.receipt-actions button {
+  flex: 1;
+}
+
+.receipt-footer {
+  text-align: center;
+  margin-top: 2rem;
+  color: white;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.receipt-footer p {
+  margin: 0.5rem 0;
+}
+
+.error-box {
+  background: white;
+  padding: 3rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.error-box h2 {
+  color: #e63946;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .receipt-card {
+    padding: 1.5rem;
+  }
+
+  .receipt-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .detail-item {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .receipt-actions {
+    flex-direction: column;
+  }
+}

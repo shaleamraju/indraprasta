@@ -43,6 +43,11 @@
      - `JWT_SECRET` = (generate random string)
      - `ADMIN_USER` = admin
      - `ADMIN_PASS` = secret123 (change this!)
+     - `EMAIL_SERVICE` = gmail (optional)
+     - `EMAIL_USER` = your-email@gmail.com (optional)
+     - `EMAIL_PASS` = your-app-password (optional)
+     - `HOTEL_NAME` = Your Hotel Name
+     - `HOTEL_EMAIL` = your-hotel@example.com
 
 #### Frontend Deployment
 1. Wait for backend to deploy, copy its URL (e.g., https://hotel-backend-xyz.onrender.com)
@@ -67,10 +72,32 @@ For production use, consider:
 - Using external database (MongoDB Atlas, PostgreSQL)
 - Using cloud storage (AWS S3, Cloudinary) for uploads
 
+### Email Configuration (Optional)
+
+To enable automatic email confirmations with receipts:
+
+1. **For Gmail:**
+   - Enable 2-factor authentication on your Gmail account
+   - Generate an App Password: https://myaccount.google.com/apppasswords
+   - Use this app password (not your regular password) for `EMAIL_PASS`
+
+2. **Set Environment Variables:**
+   - `EMAIL_SERVICE` = gmail
+   - `EMAIL_USER` = your-email@gmail.com
+   - `EMAIL_PASS` = your-16-character-app-password
+   - `HOTEL_NAME` = Your Hotel Name
+   - `HOTEL_EMAIL` = contact email shown in receipts
+
+3. **Without Email:**
+   - Leave EMAIL_USER and EMAIL_PASS empty
+   - Receipts will still be generated and downloadable
+   - No emails will be sent
+
 ### Security
 1. **Change default admin password** in Render dashboard
 2. Generate strong JWT_SECRET
 3. Set proper CORS origins in production
+4. Never commit .env files with real credentials
 
 ## Post-Deployment
 

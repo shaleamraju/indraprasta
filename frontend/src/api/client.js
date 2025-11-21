@@ -1,5 +1,5 @@
-// Central API client. Configure base via VITE_API_BASE (e.g. http://localhost:4000)
-const BASE = import.meta.env.VITE_API_BASE || '';
+// Central API client. Configure base via VITE_API_BASE or VITE_API_URL
+const BASE = import.meta.env.VITE_API_BASE || import.meta.env.VITE_API_URL || '';
 
 export async function apiFetch(path, options = {}) {
   const url = path.startsWith('http') ? path : BASE + path;

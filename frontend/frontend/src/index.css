@@ -1,0 +1,46 @@
+:root {
+  --font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --display-family: 'Playfair Display', serif;
+
+  /* White and Sky Blue Theme */
+  --color-primary: #0ea5e9;       /* Sky Blue */
+  --color-secondary: #0c4a6e;     /* Deep Sky Blue */
+  --color-accent: #ef4444;        /* Soft Red */
+  --color-background: #f0f9ff;    /* Light Sky Blue Tint */
+  --color-surface: #ffffff;       /* White */
+  --color-text: #0f172a;         /* Dark Blue/Grey */
+  --color-text-muted: #64748b;    /* Muted Grey/Blue */
+  --color-border: #e2e8f0;       /* Light Grey */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--display-family);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+#root {
+  padding-top: 64px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}

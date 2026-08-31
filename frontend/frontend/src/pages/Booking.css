@@ -1,0 +1,376 @@
+.booking-page {
+  padding: 4rem 1rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.booking-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.booking-header h2 {
+  font-size: 2.5rem;
+  color: var(--color-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.booking-header p {
+  color: var(--color-text-muted);
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-top: 2rem;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.step-circle.current {
+  background-color: var(--color-primary);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3);
+}
+
+.step-circle.completed {
+  background-color: #22c55e;
+  color: white;
+}
+
+.step-line {
+  width: 60px;
+  height: 4px;
+  background-color: #e2e8f0;
+  transition: background-color 0.3s ease;
+}
+
+.step-line.completed {
+  background-color: #22c55e;
+}
+
+.booking-card {
+  background-color: white;
+  border-radius: 2rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.booking-step {
+  padding: 3rem;
+}
+
+.step-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.step-icon {
+  font-size: 1.5rem;
+}
+
+.step-title h3 {
+  font-size: 1.75rem;
+  color: var(--color-secondary);
+}
+
+.date-selector {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.date-selector label {
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.date-selector input {
+  padding: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 1rem;
+  font-size: 1.1rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.date-selector input:focus {
+  border-color: var(--color-primary);
+}
+
+.date-hint {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.room-selection-container {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+}
+
+@media (max-width: 992px) {
+  .room-selection-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.room-grid-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.room-legend {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot.available { background-color: #f1f5f9; border: 1px solid #cbd5e1; }
+.dot.selected { background-color: var(--color-primary); }
+.dot.booked { background-color: #cbd5e1; }
+
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+  gap: 0.75rem;
+}
+
+.room-cell {
+  aspect-ratio: 1;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: 1px solid var(--color-border);
+}
+
+.room-cell.available {
+  background-color: white;
+  color: var(--color-secondary);
+}
+
+.room-cell.available:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.room-cell.selected {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.room-cell.booked {
+  background-color: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.booking-summary {
+  background-color: var(--color-background);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.booking-summary h4 {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-secondary);
+}
+
+.summary-list {
+  flex: 1;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.875rem;
+}
+
+.summary-price-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.summary-price-wrap .price {
+  font-weight: 600;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.empty-text {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  margin-top: 2rem;
+}
+
+.summary-total {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px dashed var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.total-amount {
+  color: var(--color-primary);
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.field input {
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 0.75rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.field input:focus {
+  border-color: var(--color-primary);
+}
+
+.step-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  color: var(--color-secondary);
+}
+
+.feedback-area {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.success-text {
+  color: #22c55e;
+  font-weight: 500;
+}
+
+.error-text {
+  color: #ef4444;
+  font-weight: 500;
+}

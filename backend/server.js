@@ -50,6 +50,7 @@ if (!fs.existsSync(receiptsDir)) fs.mkdirSync(receiptsDir);
 const bookingsFile = path.join(dataDir, 'bookings.json');
 const adminFile = path.join(dataDir, 'admin.json');
 const occupancyFile = path.join(dataDir, 'room-occupancy.json');
+const roomsInfoFile = path.join(dataDir, 'rooms.json');
 
 function hashPassword(password, salt = crypto.randomBytes(16).toString('hex')) {
   const derived = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
@@ -369,6 +370,19 @@ app.get('/api/public/booking/:bookingId', (req, res) => {
   }
   
   res.json(booking);
+});
+
+// Get room types and pricing
+app.get('/api/rooms/info', (req, res) => {
+  if (!fs.existsSync(roomsInfoFile)) {
+    return res.status(404).json({ error: 'Room information not found' });
+  }
+  try {
+    const info = JSON.parse(fs.readFileSync(roomsInfoFile, 'utf8'));
+    res.json(info);
+  } catch {
+    res.status(500).json({ error: 'Failed to read room information' });
+  }
 });
 
 // Availability for a given date

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { apiFetch } from '../api/client.js';
 import { motion } from 'framer-motion';
-import { FileText, Download, Home, CheckCircle, Calendar, User, Hash, AlertCircle } from 'lucide-react';
+import { FileText, Download, Home, CheckCircle, Calendar, User, Hash } from 'lucide-react';
 
 export default function Receipt() {
   const { bookingId } = useParams();

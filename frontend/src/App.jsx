@@ -5,6 +5,7 @@ import HotelContent from './pages/HotelContent.jsx'
 import Booking from './pages/Booking.jsx'
 import Admin from './pages/Admin.jsx'
 import Receipt from './pages/Receipt.jsx'
+import TrackBooking from './pages/TrackBooking.jsx'
 import { Routes, Route } from 'react-router-dom'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/receipt/:bookingId" element={<Receipt />} />
+          <Route path="/track" element={<TrackBooking />} />
         </Routes>
       </div>
 

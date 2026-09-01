@@ -1,21 +1,26 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  --display-family: 'Playfair Display', serif;
+@theme {
+  --color-hotel-primary: #C5A059;
+  --color-hotel-primary-dark: #A68548;
+  --color-hotel-secondary: #1E293B;
+  --color-hotel-accent: #FDFCFB;
+
+  --font-display: 'Playfair Display', serif;
+  --font-sans: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 body {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-sans);
+  background-color: var(--color-hotel-accent);
+  color: var(--color-hotel-secondary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--display-family);
+  font-family: var(--font-display);
 }
 
 html {

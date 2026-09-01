@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { apiFetch } from '../api/client.js';
 import { motion } from 'framer-motion';
-import { Search, FileText, Download, AlertCircle, CheckCircle } from 'lucide-react';
+import { Search, FileText, Download, AlertCircle, CheckCircle, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function TrackBooking() {
@@ -133,7 +133,7 @@ export default function TrackBooking() {
               </div>
             </div>
           </motion.div>
-        </div>
+        )}
       </div>
     </div>
   );
